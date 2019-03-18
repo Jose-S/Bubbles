@@ -24,7 +24,12 @@ function init() {
   ctx.lineWidth = 2;
 
   // ADD EVENT LISTENERS
-  c.addEventListener("mousemove", onHover);
+  // Not a touch device
+  if (!("ontouchstart" in document.documentElement)) {
+    c.addEventListener("mousemove", onHover);
+  } else {
+    c.addEventListener("touchmove", onHover);
+  }
   window.addEventListener("resize", onResize);
 
   // SET AUDIO PROPERTIES
