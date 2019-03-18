@@ -5,6 +5,9 @@ var ctx; // Canvas COntext
 var bubbles = [];
 var xMouse = 0;
 var yMouse = 0;
+// Touch Screen handeling
+var deviceIsTouch;
+var ongoingTouches = [];
 // Blob Sound Effect Retrieved from https://youtu.be/LnMhJU6RsYU
 var audioPop = new Audio("assets/blob-sound-effect.mp3");
 // Playground Sound Effect Retrieved from  https: //youtu.be/UydZd954-tM
@@ -22,13 +25,17 @@ function init() {
   ctx = c.getContext("2d");
   ctx.strokeStyle = "rgba(255, 255, 255, 0.6)";
   ctx.lineWidth = 2;
-
+  deviceIsTouch = isTouchDevice();
   // ADD EVENT LISTENERS
   // Not a touch device
-  if (!("ontouchstart" in document.documentElement)) {
+  if (!deviceIsTouch) {
     c.addEventListener("mousemove", onHover);
   } else {
-    c.addEventListener("touchmove", onHover);
+    // Is a touch device
+    c.addEventListener("touchstart", onTouch);
+    c.addEventListener("touchmove", onTouch);
+    c.addEventListener("touchend", offTouch);
+    c.addEventListener("touchcancel", offTouch);
   }
   window.addEventListener("resize", onResize);
 
@@ -41,6 +48,7 @@ function init() {
 // Result: Start experience
 function start() {
   // Remove Start elemenets
+  startBtn.onclick = function () {};
   startBtn.classList.add("remove");
   // Show instructions
   instructions.classList.add("show");
@@ -59,7 +67,7 @@ function draw() {
   ctx.globalCompositeOperation = "destination-over"; // Draw above
   ctx.clearRect(0, 0, c.width, c.height); // clear canvas
 
-  bubbles.forEach(function(bubble) {
+  bubbles.forEach(function (bubble) {
     bubble.move();
     bubble.draw(ctx);
   });
@@ -70,7 +78,7 @@ function draw() {
 
 //---------- LISTENER FUNCTIONS----------//
 
-// Params: None
+// Params: Event data
 // Return: Sets xMouse and yMouse to cursor cords
 function onHover(event) {
   xMouse = event.clientX;
@@ -86,7 +94,39 @@ function onResize() {
   ctx.lineWidth = 2;
 }
 
+// Params: Event data
+// Return: Adds touch points to ongoingTouches array
+function onTouch(event) {
+  offTouch(event);
+  var touches = event.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    ongoingTouches.push(copyTouch(touches[i]));
+  }
+}
+
+// Params: Event data
+// Return: deletes ongoingTouches array elements
+function offTouch(event) {
+  event.preventDefault();
+  ongoingTouches.length = 0;
+}
+
+function onTouchMove(event) {
+  event.preventDefault();
+  var touches = evt.changedTouches;
+}
+
 //---------- UTILITIES----------//
+
+// Params: Touch object
+// Returns: A new object with copied touch data
+function copyTouch(touch) {
+  return {
+    id: touch.identifier,
+    x: touch.pageX,
+    y: touch.pageY
+  };
+}
 
 // Params: Num amount of bubbles to create
 // Returns: Adds amount param of bubbles to global bubbles array
@@ -133,6 +173,12 @@ function sinMove(amp, val, offset) {
 // Return: Converts Degrees to Radians
 function degreesToRadians(deg) {
   return deg * (Math.PI / 180);
+}
+
+function isTouchDevice() {
+  return (('ontouchstart' in window) ||
+    (navigator.MaxTouchPoints > 0) ||
+    (navigator.msMaxTouchPoints > 0));
 }
 
 // START OF w3Schools CODE
