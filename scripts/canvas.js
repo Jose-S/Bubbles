@@ -18,7 +18,7 @@ var elem = document.documentElement;
 var isFullscreen = false;
 
 function init() {
-  // GLOBLA VARIABLE SETUP
+  // GLOBAL VARIABLE SETUP
   c = document.getElementById("myCanvas");
   c.width = document.body.clientWidth;
   c.height = document.body.clientHeight;
