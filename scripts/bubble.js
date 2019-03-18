@@ -56,11 +56,27 @@ function drawBubble(ctx) {
     ctx.stroke();
   }
 
-  // DRAW BUBBLE POP if hovered and not popped
-  if (this.pressed(xMouse, yMouse) && this.popped == false) {
-    this.popped = true;
-    // Remove Hover Over Instructions
-    instructions.classList.remove("show");
+  // Determine if bubble has been touched/hovered
+  // & DRAW BUBBLE POP if hovered and not popped
+  // Slight code repetition for readability
+  if (!deviceIsTouch) {
+    // NOT TOUCH SCREEN
+    if (this.pressed(xMouse, yMouse) && this.popped == false) {
+      this.popped = true;
+      // Remove Hover Over Instructions
+      instructions.classList.remove("show");
+    }
+  } else if (ongoingTouches.length) {
+    // IS TOUCH SCREEN and HAS TOUCH POINTS
+    // interate through each touchpoint
+    for (let i = 0; i < ongoingTouches.length; i++) {
+      let touched = this.pressed(ongoingTouches[i].x, ongoingTouches[i].y);
+      if (touched && this.popped == false) {
+        this.popped = true;
+        // Remove Hover Over Instructions
+        instructions.classList.remove("show");
+      }
+    }
   }
 
   // Continue drawing pop animation if popline is still visible (> 0)
@@ -122,9 +138,9 @@ function move() {
     this.rotateRigth = !this.rotateRigth;
   }
   // Decide to increase or decrease lineRotation amount
-  this.lineRotation += this.rotateRigth
-    ? this.lineRotateInc
-    : -this.lineRotateInc;
+  this.lineRotation += this.rotateRigth ?
+    this.lineRotateInc :
+    -this.lineRotateInc;
 }
 
 function remove() {
