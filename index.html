@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <meta http-equiv="X-UA-Compatible" content="ie=edge">
+   <title>Bubbles</title>
+   <link rel="stylesheet" type="text/css" href="css/index.css">
+</head>
+
+<body>
+   <canvas id="myCanvas"></canvas>
+   <!-- INITIAL START BUTTON -->
+   <div class="initial">
+      <!-- HEADPHONE ICON RETRIEVED FROM: Icon made by https://www.freepik.com/ from www.flaticon.com  -->
+      <img src="assets/headphone-symbol.svg">
+      <button id="startBtn" class="pulsate-bck" onclick="start()">Start</button>
+   </div>
+   <!-- INSTRUCTIONS -->
+   <div class="instructions">Hover to pop</div>
+   <!-- FULLSCREEN BUTTON -->
+   <!-- ICON RETRIEVED FROM: https://fontawesome.com/icons/expand?style=solid -->
+   <input type="image" src="assets/expand-solid.svg" onclick="changeScreen()" />
+   <!-- JAVASCRIPT -->
+   <script src="scripts/bubble.js"></script>
+   <script src="scripts/canvas.js"></script>
+</body>
+
+</html>
